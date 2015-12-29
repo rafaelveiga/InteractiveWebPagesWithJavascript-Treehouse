@@ -72,26 +72,59 @@ var addTask = function() {
 	//Creates the HTML element for this new task
 	var newListItem = taskElementCreator(taskInput.value);
 
-	//Appends it to the incomplete task list
-	incompleteTaskList.appendChild(newListItem);
+	// Checks if the task value is empty
+	if (taskInput.value.length > 0) {
+		//Appends it to the incomplete task list
+		incompleteTaskList.appendChild(newListItem);
 
-	//Bind main events on the newly created task
-	bindTaskEvents(newListItem, completeTask);
+		//Bind main events on the newly created task
+		bindTaskEvents(newListItem, completeTask);
 
-	//Clear the taskInput value
-	taskInput.value = " ";
+		//Clear the taskInput value
+		taskInput.value = " ";
+	} else {
+		alert("empty task!");
+	}
 }
 
 // EDIT TASK
 var editTask = function() {
 	console.log("editTask() run");
-	// When edit button is pressed - Toggle edit mode
-		//if has class .editMode
-			// label holds the input value
-			// remove class .editMode
-		//else if doesnt has class .editMode
-			// add class .editMode
-			// input value holds the label text
+
+	//Gets Parent LI from the clicked button
+	var listItem = this.parentNode;
+
+	// Gets the edit input and label inside the list item
+	var editInput = listItem.querySelector('input[type=text]');
+	var label 	  = listItem.querySelector('label');
+
+	//Checks if our listItem has the editMode class
+	var hasEditModeClass = listItem.classList.contains("editMode");
+
+	//if has class .editMode
+	if (hasEditModeClass) {		
+		// Turns ON the edit mode
+
+		// Label holds the input value
+		label.innerText = editInput.value;		
+	} else {
+		// Turns OFF the edit mode
+
+		// input value holds the label text
+		editInput.value =  label.innerText;
+	}
+
+	//toggle .editMode class on the listItem
+	listItem.classList.toggle("editMode");
+
+	//toggles the Edit / Save text on the button
+	var editButton = listItem.querySelector("button.edit");
+	if (editButton.innerText === "Edit") {
+		editButton.innerText = "Save";
+	}
+	else if (editButton.innerText === "Save") {
+		editButton.innerText   = "Edit";
+	}
 }
 
 // DELETE TASK
